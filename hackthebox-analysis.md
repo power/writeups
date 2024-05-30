@@ -1,5 +1,7 @@
 # HackTheBox - Analysis
 
+## Enumeration
+
 We start with our Nmap scan which reveals a flurry of ports.
 
 ```
@@ -70,7 +72,7 @@ The next step seems like an obvious one by passing the "\*" wildcard to display 
 
 <figure><img src=".gitbook/assets/image (21).png" alt=""><figcaption></figcaption></figure>
 
-
+## User&#x20;
 
 Unfortunately at this point I reached an angle where I felt out of my depth, so decided to go back to the basics and conducted another nmap scan, but across all ports. We run the same flags but just adding the additional search for all ports and find further information for the port 33060 which appears to be related to LDAP permissions.
 
@@ -155,6 +157,8 @@ We're particularly interested in finding any credentials that we can so we take 
 Sure enough, those are credentials for jdoe. That gives us credentials for every user besides soc\_analyst, but we'll look into that later. Let's get off of our meterpreter shell and into something more proper. We load up evil-winrm and are successful in logging in.
 
 <figure><img src=".gitbook/assets/image (13).png" alt=""><figcaption></figcaption></figure>
+
+## Root
 
 Whilst enumerating the current users earlier in this, we noticed that there was a Snort log, and consequently a Snort directory in the base of the file system. This is quite weird for a CTF and thus quite interesting for us. We find the executable binary and check the version by adding the `-V` flag.
 
