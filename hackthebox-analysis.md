@@ -104,45 +104,45 @@ From this web page, we are specifically in the "presence filters" as we're looki
 
 We leave our script to run and eventually get our password.
 
-<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (14).png" alt=""><figcaption></figcaption></figure>
 
 So we have a set of credentials, let's take these to the login page we found earlier and go from there. Sure enough, using the credentials we've found, we log in successfully!
 
-<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Immediately we notice the "SOC Report" which leads us to a file upload which we straight throw our reverse shell into.
 
-<figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
 
 Unfortunately we're denied, so we revert to a more basic reverse shell and instead head for code execution, knowing that this is a Windows machine we'll need to ensure we're using Windows commands instead of Linux ones.
 
-<figure><img src=".gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (3) (1).png" alt=""><figcaption></figcaption></figure>
 
 Sure enough, we're successful the second time when using a simplified shell from revshells.com so now just have to find our file.. From our earlier enumeration we know that there's an uploads directory following the dashboards directory, so make a wild guess that our shell will be there.&#x20;
 
-<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4) (1).png" alt=""><figcaption></figcaption></figure>
 
 We run the commands you'd expect and find that we are the svc\_web user, so let's generate our own shell. Our first step is to generate our reverse shell then provide the necessary binaries on the target machine, in this instance, we're going to need a Windows Netcat binary. We start by getting our shell and netcat binary into the same folder and then launch our own webserver.
 
-<figure><img src=".gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (5) (1).png" alt=""><figcaption></figcaption></figure>
 
 The reason we're using both a msfvenom and NC binary is incase the other fails, luckily, following some fine tuning, we can ignore the netcat binary and rely solely on Metasploit. We upload our msfvenom binary and then load metasploit, using `multi/handler` as this is responsible for catching Metasploit reverse shells and then configure the necessary settings before gaining a stabilised shell.
 
-<figure><img src=".gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (6) (1).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (7) (1).png" alt=""><figcaption></figcaption></figure>
 
 We have a shell but still no user, we try to enter all of the user directories but are unsuccessful with them all.&#x20;
 
-<figure><img src=".gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (9) (1).png" alt=""><figcaption></figcaption></figure>
 
 We could drop winPEAS or utilise meterpreter capabilities to enumerate our current situation, but before we do that, there must be some kind of credentials that were used to access the LDAP services that we discovered on list.php, so we head there and look at the contents of the file. As we had hoped, at the top of the file we have credentials for the "webservice" user, which is a user we'd found attempting to access user directories.
 
-<figure><img src=".gitbook/assets/image (8).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (8) (1).png" alt=""><figcaption></figcaption></figure>
 
 Since there's credentials for the "webservice" user, we could also look for credentials for "wsmith", "jdoe" and "soc\_analyst", so let's have a look over the rest of these web pages. Sure enough we find another set of credentials for the database in login.php which we utilised to gain this shell.
 
-<figure><img src=".gitbook/assets/image (10).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (10) (1).png" alt=""><figcaption></figcaption></figure>
 
 Following some AD exploitation methodology we also decide to check registry keys for anything that may be of importance.
 
@@ -150,19 +150,19 @@ Following some AD exploitation methodology we also decide to check registry keys
 
 We're particularly interested in finding any credentials that we can so we take our cmd shell into PowerShell and execute the necessary commands to find this information.
 
-<figure><img src=".gitbook/assets/image (11).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (11) (1).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (12).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (12) (1).png" alt=""><figcaption></figcaption></figure>
 
 Sure enough, those are credentials for jdoe. That gives us credentials for every user besides soc\_analyst, but we'll look into that later. Let's get off of our meterpreter shell and into something more proper. We load up evil-winrm and are successful in logging in.
 
-<figure><img src=".gitbook/assets/image (13).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (13) (1).png" alt=""><figcaption></figcaption></figure>
 
 ## Root
 
 Whilst enumerating the current users earlier in this, we noticed that there was a Snort log, and consequently a Snort directory in the base of the file system. This is quite weird for a CTF and thus quite interesting for us. We find the executable binary and check the version by adding the `-V` flag.
 
-<figure><img src=".gitbook/assets/image (14).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (14) (1).png" alt=""><figcaption></figcaption></figure>
 
 We Google for this version and privilege escalations and find an article on DLL hijacking.
 
