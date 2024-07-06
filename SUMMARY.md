@@ -13,3 +13,4 @@
 * [TryHackMe - Airplane](tryhackme-airplane.md)
 * [TryHackMe - mKingdom](tryhackme-mkingdom.md)
 * [TryHackMe - W1seGuy](tryhackme-w1seguy.md)
+* [HackTheBox - Perfection](hackthebox-perfection.md)
