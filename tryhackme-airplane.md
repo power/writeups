@@ -102,23 +102,23 @@ Service detection performed. Please report any incorrect results at https://nmap
 
 Instantly from loading the webpage, we notice that the Index page takes one request which appears to be a file, which instantly leads us to some kind of LFI vulnerability.
 
-<figure><img src=".gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 We then prove this by trying to load the /etc/passwd file and reading the contents, unfortunately not revealing any password hashes but allowing us to find the "hudson" and "carlos" users running on the machine.
 
-<figure><img src=".gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 We try to steal their SSH keys but are unable to do so since they do not appear to exist and as such, decide to check the user who is currently running our process. All current processes on the target system store relevant information in the /proc/ directory, and we know our current process will operate in the "self" folder and then can check the status with "status". Looking at the output from this we notice that this is running as the "hudson" user is running the webserver, as identified by comparing the /etc/passwd file to the UID shown from this command.
 
-<figure><img src=".gitbook/assets/image (2) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Using the same folder, we can find the current command that the user ran to execute this service which reveals the location of our file.
 
-<figure><img src=".gitbook/assets/image (3) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (3) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Unfortunately, as we attempt to load this file we realise this isn't the file we want, nor is "app.py" located in the Python3 folder.&#x20;
 
-<figure><img src=".gitbook/assets/image (4) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 What else can we exploit in the current process folder? Well there's always the current working directory, more commonly known as "cwd". This is symlinked to the current working directory and therefore lets us read a fill in that current directory which, in our case, can be "app.py" as we established from our earlier enumeration.
 
@@ -263,13 +263,13 @@ Unsure what it is, we send a request to see the current TCP connections being ma
 
 We go to the Intruder page of Burpsuite, create our request and insert our Wordlist of numbers from 1-10000.
 
-<figure><img src=".gitbook/assets/image (5) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (5) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (6) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (6) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 We leave this running for a while and eventually check back, avoding requests with a length of 187, which indicates "Page Not Found" and find our service! Running as service 523, a GDB server is running on port 6048!
 
-<figure><img src=".gitbook/assets/image (7) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (7) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Googling for potential ways to gain a shell on a GDB Server we find the following HackTricks documentation, for which we follow it.
 
@@ -277,15 +277,15 @@ Googling for potential ways to gain a shell on a GDB Server we find the followin
 
 We notice we can't upload in our current folder, presumably due to a lack of permissions so put this into the /tmp/ folder and continue on.
 
-<figure><img src=".gitbook/assets/image (8) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (8) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 We get our shell but aren't exactly happy with it, so decide to upgrade by placing our SSH public key into authorized\_keys, allowing us to gain a proper shell on the box
 
-<figure><img src=".gitbook/assets/image (9) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (9) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Looking at the contents of our home directory we have nothing of interest so perform some basic Linux enumeration with the following command, we look for binaries that we may have interesting permissions with and eventually find a hit with the set userid permission.
 
-<figure><img src=".gitbook/assets/image (10) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (10) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Our beloved GTFOBins comes in handy and we use a SUID bit set to gain the effect userid of Carlos.
 

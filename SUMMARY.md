@@ -16,3 +16,4 @@
 * [HackTheBox - Perfection](hackthebox-perfection.md)
 * [TryHackMe - Publisher](tryhackme-publisher.md)
 * [HackTheBox - Headless](hackthebox-headless.md)
+* [TryHackMe - New York Flankees](tryhackme-new-york-flankees.md)

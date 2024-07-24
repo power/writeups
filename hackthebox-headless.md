@@ -103,17 +103,17 @@ Service detection performed. Please report any incorrect results at https://nmap
 
 We navigate the webpage and see nothing particularly of interest, the webpage just indicates that it'll be released in about a month so click on the button below which takes us to `/support`
 
-<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (10).png" alt=""><figcaption></figcaption></figure>
 
 
 
 The support page gives us a form which we try XSS but the site seems to have some kind of sanitisation, as it blocks our requests.
 
-<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 This indicates we might be looking in the wrong place but it does reveal something interesting, the `is_admin` cookie. It looks to be a JWT token so we pass it to https://jwt.io but it isn't, although does show us that the first portion indicates "user"
 
-<figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
 
 From here we decide to get creative, although there's no XSS in the form itself maybe we can try an gain XSS from the headers. We try various headers and find that the "User-Agent" header gives us XSS!
 
@@ -131,19 +131,19 @@ Let's now try and get an administrative cookie. We're going to use the following
 
 This payload will silently make a HTTP request to our VPN IP and give us the users cookie encoded in Base64, indicated by `btoa`. After crafting our payload, we start our listener and send the request. We have to wait a moment but we then get a hit on our web server!
 
-<figure><img src=".gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (3) (1).png" alt=""><figcaption></figcaption></figure>
 
 We decode the payload and then look at where we can use it, finding the `/dashboard` directory.
 
-<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4) (1).png" alt=""><figcaption></figcaption></figure>
 
 We use the "Inspect Element" feature on our browser and edit our cookie so that instead of seeing an Unauthorized error, we have access to the page.
 
-<figure><img src=".gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (5) (1).png" alt=""><figcaption></figcaption></figure>
 
 Refreshing the page after editing our cookie, we find we have access to an "Administrator Dashboard" that allows us to generate website health reports based on the day. We catch this request in Burp and try to perform command injection and get a POC!
 
-<figure><img src=".gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (6) (1).png" alt=""><figcaption></figcaption></figure>
 
 From this point we could either enumerate the box to see if we have tools such as Netcat available or download our own bash shell and run it, both are viable options but we'll go for the former for ease.&#x20;
 
@@ -153,13 +153,13 @@ From this point we could either enumerate the box to see if we have tools such a
 
 From here we stabilise our shell and get our `user.txt`
 
-<figure><img src=".gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (7) (1).png" alt=""><figcaption></figcaption></figure>
 
 ## Root
 
 We check our sudo privileges which reveals we can run `/usr/bin/syscheck` as sudo, so check the strings for it which just reveals the script!
 
-<figure><img src=".gitbook/assets/image (8).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (8) (1).png" alt=""><figcaption></figcaption></figure>
 
 So the binary calls "initdb.sh" from our local directory, but there's no checks for where initdb.sh is, so if we create our own malicious shell file, we can just replace its actual purpose. We'll create a simple script that spawns us a shell as root:
 
@@ -169,6 +169,6 @@ echo -e '#!/bin/bash\nbash -p' > initdb.sh
 
 We'll then make it executable with `chmod +x initdb.sh` and run the binary.
 
-<figure><img src=".gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (9) (1).png" alt=""><figcaption></figcaption></figure>
 
 This gives us root, and that's the box!

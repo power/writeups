@@ -64,4 +64,4 @@ We run the script and we're looking for whichever version ends with a "}" and kn
 
 We find our flag and then pass the relevant information to the script, and get our 2nd flag.
 
-<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
