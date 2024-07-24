@@ -1,5 +1,7 @@
 # TryHackMe - New York Flankees
 
+## Enumeration
+
 As usual, we start with our nmap scan which reveals a HTTP server on port 8080 and SSH on port 22.
 
 ```
@@ -73,6 +75,8 @@ HackTricks puts this attack into slightly more compressed terms, making it easie
 
 
 
+## User
+
 For `padre` to operate we'll pass the URL we're testing - `http://10.10.196.131:8080/api/debug/$"`
 
 The encoding to apply to our data, which we'll specify for Hexadecimal - `-e lhex`
@@ -92,6 +96,10 @@ We try and launch a reverse shell through the browser but have no luck, so creat
 <figure><img src=".gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
 
 <figure><img src=".gitbook/assets/image (8).png" alt=""><figcaption></figcaption></figure>
+
+
+
+## Root
 
 We stabilise our shell and then explore our environment, appearing to be in some kind of docker container, which we can confirm our suspicions from the question so check for docker breakouts with quite a common one.
 
