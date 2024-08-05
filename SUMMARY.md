@@ -17,4 +17,4 @@
 * [TryHackMe - Publisher](tryhackme-publisher.md)
 * [HackTheBox - Headless](hackthebox-headless.md)
 * [TryHackMe - New York Flankees](tryhackme-new-york-flankees.md)
-* [HackTheBox - Behind The Scene](hackthebox-behind-the-scene.md)
+* [HackTheBox - Behind The Scenes](hackthebox-behind-the-scenes.md)

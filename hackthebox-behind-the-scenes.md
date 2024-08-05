@@ -1,4 +1,4 @@
-# HackTheBox - Behind The Scene
+# HackTheBox - Behind The Scenes
 
 This is a slightly different challenge from normal but we download the necessary files and since this is a reverse engineering challenge we start by looking at the strings of the binary that we have.
 
