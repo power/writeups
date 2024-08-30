@@ -1,5 +1,7 @@
 # TryHackMe - U.A. High School
 
+## Enumeration
+
 We start with our nmap scan which just reveals an SSH and HTTP server running.
 
 ```
@@ -44,6 +46,8 @@ We're going out on a limb and try to read the `/etc/passwd` file on the machine 
 
 <figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
 
+## Foothold
+
 So we have code execution! Amazing, let's get a shell. We try a Netcat shell but don't appear to have a binary on the box, so decide to craft our own shell. We make a simple Bash reverse shell:
 
 ```bash
@@ -72,6 +76,8 @@ When on the box we find two images in the images folder that we'd found through 
 
 <figure><img src=".gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
 
+## User
+
 We remain curious about the images we found earlier so downlaod them onto the system and see whether there's some kind of Steganography in them. We find nothing of interest in "yuei.jpg" and find that "oneforall.jpg" isn't supported, which seems to imply there's something corrupt with the file. We inspect the structure of the file and see it's configured to be a PNG file, so correct with this with the appropriate file signature.
 
 ```
@@ -93,6 +99,8 @@ We take these creds and SSH into the box which gives us user!
 <figure><img src=".gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
 
 <figure><img src=".gitbook/assets/image (10).png" alt=""><figcaption></figcaption></figure>
+
+## Root
 
 We run `sudo -l` and find a script that allows the user to input something to save to a file, but it's not sanitised properly so we can make this write to whatever file we want!
 
