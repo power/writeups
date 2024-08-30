@@ -21,3 +21,4 @@
 * [HackTheBox - Usage](hackthebox-usage.md)
 * [TryHackMe - Block](tryhackme-block.md)
 * [HackTheBox - Runner](hackthebox-runner.md)
+* [TryHackMe - U.A. High School](tryhackme-u.a.-high-school.md)

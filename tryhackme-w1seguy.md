@@ -60,8 +60,8 @@ We start by defining a variable with the decoded bytes of the hexadecimal XOR'd 
 
 We run the script and we're looking for whichever version ends with a "}" and know that'll be our key, and first flag.
 
-<figure><img src=".gitbook/assets/image (11) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (11) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 We find our flag and then pass the relevant information to the script, and get our 2nd flag.
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
