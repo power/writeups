@@ -94,3 +94,39 @@ We take these creds and SSH into the box which gives us user!
 
 <figure><img src=".gitbook/assets/image (10).png" alt=""><figcaption></figcaption></figure>
 
+We run `sudo -l` and find a script that allows the user to input something to save to a file, but it's not sanitised properly so we can make this write to whatever file we want!
+
+```bash
+#!/bin/bash
+
+echo "Hello, Welcome to the Report Form       "
+echo "This is a way to report various problems"
+echo "    Developed by                        "
+echo "        The Technical Department of U.A."
+
+echo "Enter your feedback:"
+read feedback
+
+
+if [[ "$feedback" != *"\`"* && "$feedback" != *")"* && "$feedback" != *"\$("* && "$feedback" != *"|"* && "$feedback" != *"&"* && "$feedback" != *";"* && "$feedback" != *"?"* && "$feedback" != *"!"* && "$feedback" != *"\\"* ]]; then
+    echo "It is This:"
+    eval "echo $feedback"
+
+    echo "$feedback" >> /var/log/feedback.txt
+    echo "Feedback successfully saved."
+else
+    echo "Invalid input. Please provide a valid input." 
+fi
+```
+
+We run a POC by saving some random contents to a file then checking the permissions, and we see it's owned by root. Since we only have writing permissions our route for root here is to simply upload our own public SSH key and then SSH into the box.
+
+We grab our public key and then run the script again, saving it into the default location where authorised keys should be stored...
+
+<figure><img src=".gitbook/assets/image (120).png" alt=""><figcaption></figcaption></figure>
+
+We attempt to SSH into the box which is successful and as such, gives us the box!
+
+<figure><img src=".gitbook/assets/image (121).png" alt=""><figcaption></figcaption></figure>
+
+<figure><img src=".gitbook/assets/image (122).png" alt=""><figcaption></figcaption></figure>
