@@ -108,11 +108,11 @@ We leave our script to run and eventually get our password.
 
 So we have a set of credentials, let's take these to the login page we found earlier and go from there. Sure enough, using the credentials we've found, we log in successfully!
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Immediately we notice the "SOC Report" which leads us to a file upload which we straight throw our reverse shell into.
 
-<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Unfortunately we're denied, so we revert to a more basic reverse shell and instead head for code execution, knowing that this is a Windows machine we'll need to ensure we're using Windows commands instead of Linux ones.
 

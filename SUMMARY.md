@@ -22,3 +22,4 @@
 * [TryHackMe - Block](tryhackme-block.md)
 * [HackTheBox - Runner](hackthebox-runner.md)
 * [TryHackMe - U.A. High School](tryhackme-u.a.-high-school.md)
+* [HackTheBox - Intuition](hackthebox-intuition.md)

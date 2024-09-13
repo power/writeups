@@ -102,15 +102,15 @@ Service detection performed. Please report any incorrect results at https://nmap
 
 Instantly from loading the webpage, we notice that the Index page takes one request which appears to be a file, which instantly leads us to some kind of LFI vulnerability.
 
-<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 We then prove this by trying to load the /etc/passwd file and reading the contents, unfortunately not revealing any password hashes but allowing us to find the "hudson" and "carlos" users running on the machine.
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 We try to steal their SSH keys but are unable to do so since they do not appear to exist and as such, decide to check the user who is currently running our process. All current processes on the target system store relevant information in the /proc/ directory, and we know our current process will operate in the "self" folder and then can check the status with "status". Looking at the output from this we notice that this is running as the "hudson" user is running the webserver, as identified by comparing the /etc/passwd file to the UID shown from this command.
 
-<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Using the same folder, we can find the current command that the user ran to execute this service which reveals the location of our file.
 

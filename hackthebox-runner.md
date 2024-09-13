@@ -31,11 +31,11 @@ The website on port 80 doesn't appear to have anything of use and port 8000 prov
 
 We run a scan to check for subdomains but don't find anything so decide to get creative with our wordlist.
 
-<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 We use "cewl", a command line tool for generating custom wordlists, to run the output against the domain, to search for any subdomains of interest which brings us to "TeamCity".
 
-<figure><img src=".gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 We alter our `/etc/hosts` to reflect this and then head to the subdomain. We're with a login page which also contains a version, we take that version and search for any vulnerabilities which is successful!
 

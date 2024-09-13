@@ -109,11 +109,11 @@ We navigate the webpage and see nothing particularly of interest, the webpage ju
 
 The support page gives us a form which we try XSS but the site seems to have some kind of sanitisation, as it blocks our requests.
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 This indicates we might be looking in the wrong place but it does reveal something interesting, the `is_admin` cookie. It looks to be a JWT token so we pass it to https://jwt.io but it isn't, although does show us that the first portion indicates "user"
 
-<figure><img src=".gitbook/assets/image (2) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 From here we decide to get creative, although there's no XSS in the form itself maybe we can try an gain XSS from the headers. We try various headers and find that the "User-Agent" header gives us XSS!
 
