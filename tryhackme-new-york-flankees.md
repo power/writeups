@@ -32,7 +32,7 @@ The "Stefan Test" page contains two TODO's:
 * Implement custom authentication
 * Fix verbose error padding
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 This doesn't appear to be too useful until we check the  source code which reveals some JavaScript and something that looks like it could be our in.
 
@@ -57,15 +57,15 @@ This doesn't appear to be too useful until we check the  source code which revea
 
 This function gives us a URL and a location it'll be sent to, along with how it should be handled on response. We cannot run this through our developer console but find that we have some luck by visiting the URL as we gain a "Custom authentication success" message.
 
-<figure><img src=".gitbook/assets/image (2) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 We try and alter the URL but quickly find our error message, "Decryption Error".
 
-<figure><img src=".gitbook/assets/image (3) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (3) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Where from here? Well, this stumped me for a bit until I tried to put some of the clues together, on the front page this fictional company is sponsored by "Oracle" and one of Stefan's things to do was fix the padding, so after many stabs in the dark we get a hit with this.
 
-<figure><img src=".gitbook/assets/image (4) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Well, this looks interesting. Depending on your interest in the area, this could be something of interest to follow but as I was focused on solving the box, I searched for a HackTricks article which helped me find what I needed.
 
@@ -85,17 +85,17 @@ And then finally the data we found from the JavaScript function.
 
 From this, we get a set of credentials!
 
-<figure><img src=".gitbook/assets/image (5) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (5) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 We head back to the "Admin Login" page and log in, having access to submit commands now. We check whether we can see the output from commands but simply just get an "OK" if our command is valid, or no response if not.&#x20;
 
-<figure><img src=".gitbook/assets/image (6) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (6) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 We try and launch a reverse shell through the browser but have no luck, so create a bash script that should launch us into a shell, which it does.
 
-<figure><img src=".gitbook/assets/image (7) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (7) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (8) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (8) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 
@@ -111,6 +111,6 @@ We start by checking for other docker images for which we find a gradle docker i
 docker run -it -v /:/host/ d5954e1d9fa4 chroot /host/ bash
 ```
 
-<figure><img src=".gitbook/assets/image (9) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (9) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 We can see from the difference in bases of our directory that we've broken out and we have our final flag, marking this box as complete!

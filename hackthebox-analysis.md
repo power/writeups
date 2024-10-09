@@ -100,7 +100,34 @@ After some more research and lots of interesting learning points, we stumbled ac
 
 From this web page, we are specifically in the "presence filters" as we're looking for a user password. Now we know that the password would show, assuming we got the character and the query correct, so it was just a case of bruteforcing the password until we got one that worked entirely. So let's build our script...
 
+```python
+import requests
 
+def main():
+
+    wordlist = "/usr/share/seclists/Fuzzing/alphanum-case-extra.txt"
+    base_url = "http://internal.analysis.htb/users/list.php?name=*)(%26(objectClass=user)(description={found_char}{FUZZ}*)"
+    found_chars = ""
+
+    with open(wordlist, 'r') as file:
+        for char in file:
+            char = char.strip()
+            modified_url = base_url.replace("{FUZZ}", char, 1).replace("{found_char}", found_chars, 1)
+
+            response = requests.get(modified_url)
+            if response.status_code == 200 and "technician" in response.text:
+                if char == "":
+                    break
+                else:
+                    print("Found character, continuining search.")
+                    found_chars += char
+                    file.seek(0, 0)  # Move the file pointer to the beginning for another iteration
+
+    print("Password:", found_chars)
+
+if __name__ == "__main__":
+    main()
+```
 
 We leave our script to run and eventually get our password.
 
@@ -108,37 +135,37 @@ We leave our script to run and eventually get our password.
 
 So we have a set of credentials, let's take these to the login page we found earlier and go from there. Sure enough, using the credentials we've found, we log in successfully!
 
-<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Immediately we notice the "SOC Report" which leads us to a file upload which we straight throw our reverse shell into.
 
-<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Unfortunately we're denied, so we revert to a more basic reverse shell and instead head for code execution, knowing that this is a Windows machine we'll need to ensure we're using Windows commands instead of Linux ones.
 
-<figure><img src=".gitbook/assets/image (3) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (3) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Sure enough, we're successful the second time when using a simplified shell from revshells.com so now just have to find our file.. From our earlier enumeration we know that there's an uploads directory following the dashboards directory, so make a wild guess that our shell will be there.&#x20;
 
-<figure><img src=".gitbook/assets/image (4) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 We run the commands you'd expect and find that we are the svc\_web user, so let's generate our own shell. Our first step is to generate our reverse shell then provide the necessary binaries on the target machine, in this instance, we're going to need a Windows Netcat binary. We start by getting our shell and netcat binary into the same folder and then launch our own webserver.
 
-<figure><img src=".gitbook/assets/image (5) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (5) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 The reason we're using both a msfvenom and NC binary is incase the other fails, luckily, following some fine tuning, we can ignore the netcat binary and rely solely on Metasploit. We upload our msfvenom binary and then load metasploit, using `multi/handler` as this is responsible for catching Metasploit reverse shells and then configure the necessary settings before gaining a stabilised shell.
 
-<figure><img src=".gitbook/assets/image (6) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (6) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (7) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (7) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 We have a shell but still no user, we try to enter all of the user directories but are unsuccessful with them all.&#x20;
 
-<figure><img src=".gitbook/assets/image (9) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (9) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 We could drop winPEAS or utilise meterpreter capabilities to enumerate our current situation, but before we do that, there must be some kind of credentials that were used to access the LDAP services that we discovered on list.php, so we head there and look at the contents of the file. As we had hoped, at the top of the file we have credentials for the "webservice" user, which is a user we'd found attempting to access user directories.
 
-<figure><img src=".gitbook/assets/image (8) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (8) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Since there's credentials for the "webservice" user, we could also look for credentials for "wsmith", "jdoe" and "soc\_analyst", so let's have a look over the rest of these web pages. Sure enough we find another set of credentials for the database in login.php which we utilised to gain this shell.
 

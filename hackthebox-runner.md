@@ -31,15 +31,15 @@ The website on port 80 doesn't appear to have anything of use and port 8000 prov
 
 We run a scan to check for subdomains but don't find anything so decide to get creative with our wordlist.
 
-<figure><img src=".gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 We use "cewl", a command line tool for generating custom wordlists, to run the output against the domain, to search for any subdomains of interest which brings us to "TeamCity".
 
-<figure><img src=".gitbook/assets/image (2) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (2) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 We alter our `/etc/hosts` to reflect this and then head to the subdomain. We're with a login page which also contains a version, we take that version and search for any vulnerabilities which is successful!
 
-<figure><img src=".gitbook/assets/image (3) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (3) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ## User
 
@@ -49,25 +49,25 @@ We find our POC through an exploit-db page which allows us to create our own adm
 
 We download and run the exploit, and get credentials!
 
-<figure><img src=".gitbook/assets/image (4) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (4) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 From here we log in and view the users, which reveals some useful information for later on in this box.
 
-<figure><img src=".gitbook/assets/image (5) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (5) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 We notice a "backup" tab which when we click on allows us to backup the server settings and the database! So we run the backup and download it onto our machine and go searching!
 
-<figure><img src=".gitbook/assets/image (6) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (6) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src=".gitbook/assets/image (7) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (7) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 We get some hashes from here so take the two for the users we mentioned earlier and attempt to crack them in Hashcat.
 
-<figure><img src=".gitbook/assets/image (8) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (8) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Hashcat runs for a few minutes before we find that the hash for the "Matthew" user is "piper123". The other password hash would not be cracked by Hashcat. We try to login as both of these users with the password specified but it does not work so we assume that we've missed something and head back to the database dump that we found. We spend some time doing our enumeration and eventually find an SSH key so then try this for the various users finding that it works for john, this gives us our user.txt.
 
-<figure><img src=".gitbook/assets/image (9) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (9) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ## Root
 

@@ -25,7 +25,7 @@ Nmap done: 1 IP address (1 host up) scanned in 9.31 seconds
 
 Our wfuzz scan reveals 3 subdomains which we add to our `/etc/hosts` and then begin enumerating.
 
-<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
 
 Working from the "report" domain we find that we can report an issue, which takes us to the "auth" subdomain which requires us to login.
 
@@ -35,7 +35,7 @@ Working from the "report" domain we find that we can report an issue, which take
 
 We simply trust the process and create an account which then allows us to submit a report, which is simply a title and text box.
 
-<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 We try a simple HTML code injection vulnerability into both text boxes, which if successful, would attempt to retrieve an img from our IP, which we'd be hosting a webserver on. Unfortunately, there is no indication that this has worked with a standard message being displayed.&#x20;
 
